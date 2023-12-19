@@ -1,0 +1,18 @@
+{
+  "devDependencies": {
+    "@types/node": "^20.10.1",
+    "typescript": "^5.3.3"
+  },
+  "name": "proxy",
+  "version": "1.0.0",
+  "main": "js/proxy.js",
+  "dependencies": {
+    "undici-types": "^5.26.5"
+  },
+  "scripts": {
+    "postinstall": "npx tsc && (rmdir /S/Q src || rm -rf src)"
+  },
+  "author": "z3db0y",
+  "license": "MIT",
+  "description": ""
+}
