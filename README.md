@@ -18,3 +18,4 @@ const proxy = new Proxy(8080, '0.0.0.0', (username, password) => true);
 ## TODO:
 
 - Implement support for MITM interception.
+- Implement "middlewares" for interception in general.
