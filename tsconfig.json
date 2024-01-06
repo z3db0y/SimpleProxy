@@ -2,5 +2,8 @@
     "compilerOptions": {
         "outDir": "js",
         "rootDir": "src"
-    }
+    },
+    "exclude": [
+        "test/**"
+    ]
 }

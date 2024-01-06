@@ -57,7 +57,7 @@ export default class Proxy {
             let url = request.url!.startsWith('/') ? new URL('http://localhost' + request.url!) : new URL(urlString);
 
             if(request.url!.startsWith('/')) {
-                console.log(request.method, request.url);
+                // console.log(request.method, request.url);
                 let response = this.requestCallback(request);
 
                 socket.write(Parser.serialize(response)!);
@@ -80,7 +80,7 @@ export default class Proxy {
                 return;
             }
 
-            console.log(request.method, urlString);
+            // console.log(request.method, urlString);
             
             target.on('error', this.onError.bind(this, socket, target));
             target.connect(parseInt(url.port) || (request.method == 'CONNECT' ? 443 : 80), url.hostname, () => {
