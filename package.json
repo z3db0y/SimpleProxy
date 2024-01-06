@@ -7,12 +7,9 @@
   "name": "proxy",
   "version": "1.0.0",
   "main": "js/proxy.js",
-  "dependencies": {
-    "undici-types": "^5.26.5"
-  },
   "scripts": {
     "postinstall": "npx tsc && (rmdir /S/Q src || rm -rf src)",
-    "test": "ts-node test"
+    "test": "ts-node src/test"
   },
   "author": "z3db0y",
   "license": "MIT",
