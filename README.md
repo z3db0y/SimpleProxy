@@ -14,8 +14,10 @@ const proxy = new Proxy(8080, '0.0.0.0', (username, password) => true);
 - Supports HTTP/HTTPS and WebSockets.
 - Custom authorization callback.
 - Custom request callback to proxy.
+- Basic Non-SSL request interception.
+
+![Interception](./.img/is_on_simpleproxy.png)
 
 ## TODO:
 
 - Implement support for MITM interception.
-- Implement "middlewares" for interception in general.
