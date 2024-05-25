@@ -8,16 +8,21 @@ export default class Proxy {
     private port: number;
     private host: string;
     private authCallback: (username: string, password: string) => boolean;
-    private requestCallback: (request: Result) => Result;
+    private requestCallback: (request: Result, socket?: Socket) => Result;
     private intercept: boolean;
-    private interceptCallback: (request: Result) => Result | null;
+    private interceptCallback: (
+        request: Result,
+        socket?: Socket
+    ) => Result | null;
 
     constructor(
         port: number,
         host = '0.0.0.0',
         authCallback: (username: string, password: string) => boolean = () =>
             true,
-        requestCallback: (request: Result) => Result = (req) => {
+        requestCallback: (request: Result, socket?: Socket) => Result = (
+            req
+        ) => {
             return {
                 isRequest: false,
                 isResponse: true,
@@ -30,7 +35,10 @@ export default class Proxy {
             };
         },
         intercept = false,
-        interceptCallback: (request: Result) => Result | null = () => null
+        interceptCallback: (
+            request: Result,
+            socket?: Socket
+        ) => Result | null = () => null
     ) {
         this.server = createServer(this.onConnect.bind(this));
 
@@ -73,18 +81,18 @@ export default class Proxy {
 
             target = new Socket();
 
-            let urlString =
-                'http' + (request.method == 'CONNECT' ? 's' : '') + '://';
-            if (!request.url!.includes('://')) urlString += request.url;
-            else urlString = request.url!;
-
             let url = request.url!.startsWith('/')
-                ? new URL('http://localhost' + request.url!)
-                : new URL(urlString);
+                ? new URL(request.url!, 'http://127.0.0.1')
+                : new URL('http://' + request.url, 'http://127.0.0.1');
 
-            if (request.url!.startsWith('/')) {
-                // console.log(request.method, request.url);
-                let response = this.requestCallback(request);
+            let isLocal = request.url!.startsWith('/');
+            request.url = url.href;
+
+            if (request.method === 'CONNECT' && !url.protocol.endsWith('s'))
+                url.protocol += 's';
+
+            if (isLocal) {
+                let response = this.requestCallback(request, socket);
 
                 socket.write(Parser.serialize(response)!);
                 socket.end();
@@ -108,10 +116,10 @@ export default class Proxy {
                 return;
             }
 
-            // console.log(request.method, urlString);
+            console.log(request.method, request.url);
 
             if (this.intercept) {
-                let response = this.interceptCallback(request);
+                let response = this.interceptCallback(request, socket);
                 if (response) {
                     socket.write(Parser.serialize(response)!);
                     socket.end();

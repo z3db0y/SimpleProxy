@@ -5,8 +5,13 @@ const proxy = new Proxy(
     (username, password) => true,
     null,
     true,
-    (request) => {
-        if (new URL(request.url).hostname == 'is_on_simpleproxy')
+    (request, socket) => {
+        console.log(request, socket.remoteAddress);
+        
+        if (
+            new URL(request.url, 'http://127.0.0.1').hostname ==
+            'is_on_simpleproxy'
+        )
             return {
                 isRequest: false,
                 isResponse: true,
@@ -15,6 +20,7 @@ const proxy = new Proxy(
                 status: 200,
                 body: Buffer.from('true'),
             };
+
         return null;
     }
 );

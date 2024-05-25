@@ -1,17 +1,17 @@
 {
-  "devDependencies": {
-    "@types/node": "^20.10.6",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.3.3"
-  },
-  "name": "proxy",
-  "version": "1.0.0",
-  "main": "js/proxy.js",
-  "scripts": {
-    "postinstall": "npx tsc && (rmdir /S/Q src || rm -rf src)",
-    "test": "ts-node src/test"
-  },
-  "author": "z3db0y",
-  "license": "MIT",
-  "description": ""
+    "devDependencies": {
+        "@types/node": "^20.10.6",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.3.3"
+    },
+    "name": "proxy",
+    "version": "1.0.0",
+    "main": "js/proxy.js",
+    "scripts": {
+        "postinstall": "npx tsc",
+        "test": "ts-node src/test"
+    },
+    "author": "z3db0y",
+    "license": "MIT",
+    "description": ""
 }
