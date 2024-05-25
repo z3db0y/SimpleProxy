@@ -34,7 +34,6 @@ export default class Proxy {
                 ),
             };
         },
-        intercept = false,
         interceptCallback: (
             request: Result,
             socket?: Socket
@@ -46,7 +45,6 @@ export default class Proxy {
         this.port = port;
         this.authCallback = authCallback;
         this.requestCallback = requestCallback;
-        this.intercept = intercept;
         this.interceptCallback = interceptCallback;
 
         this.server.listen(port, host);
@@ -97,7 +95,7 @@ export default class Proxy {
             if (request.method === 'CONNECT' && !url.protocol.endsWith('s'))
                 url.protocol += 's';
 
-            if (isLocal) {
+            if (isLocal && this.requestCallback) {
                 let response = this.requestCallback(request, socket);
 
                 socket.write(Parser.serialize(response)!);
@@ -124,7 +122,7 @@ export default class Proxy {
 
             console.log(request.method, request.url);
 
-            if (this.intercept) {
+            if (this.intercept && this.interceptCallback) {
                 let response = this.interceptCallback(request, socket);
                 if (response) {
                     socket.write(Parser.serialize(response)!);

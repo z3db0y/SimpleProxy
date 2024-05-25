@@ -4,10 +4,9 @@ const proxy = new Proxy(
     '0.0.0.0',
     (username, password) => true,
     null,
-    true,
     (request, socket) => {
         console.log(request, socket.remoteAddress);
-        
+
         if (
             new URL(request.url, 'http://127.0.0.1').hostname ==
             'is_on_simpleproxy'
