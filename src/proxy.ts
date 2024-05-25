@@ -9,7 +9,6 @@ export default class Proxy {
     private host: string;
     private authCallback: (username: string, password: string) => boolean;
     private requestCallback: (request: Result, socket?: Socket) => Result;
-    private intercept: boolean;
     private interceptCallback: (
         request: Result,
         socket?: Socket
@@ -84,7 +83,11 @@ export default class Proxy {
             try {
                 url = request.url!.startsWith('/')
                     ? new URL(request.url!, 'http://127.0.0.1')
-                    : new URL('http://' + request.url, 'http://127.0.0.1');
+                    : new URL(
+                          (request.url.includes('://') ? '' : 'http://') +
+                              request.url,
+                          'http://127.0.0.1'
+                      );
             } catch (_) {
                 return;
             }
@@ -120,9 +123,7 @@ export default class Proxy {
                 return;
             }
 
-            console.log(request.method, request.url);
-
-            if (this.intercept && this.interceptCallback) {
+            if (this.interceptCallback) {
                 let response = this.interceptCallback(request, socket);
                 if (response) {
                     socket.write(Parser.serialize(response)!);
