@@ -81,9 +81,15 @@ export default class Proxy {
 
             target = new Socket();
 
-            let url = request.url!.startsWith('/')
-                ? new URL(request.url!, 'http://127.0.0.1')
-                : new URL('http://' + request.url, 'http://127.0.0.1');
+            let url: URL;
+
+            try {
+                url = request.url!.startsWith('/')
+                    ? new URL(request.url!, 'http://127.0.0.1')
+                    : new URL('http://' + request.url, 'http://127.0.0.1');
+            } catch (_) {
+                return;
+            }
 
             let isLocal = request.url!.startsWith('/');
             request.url = url.href;
